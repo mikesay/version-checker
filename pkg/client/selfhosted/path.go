@@ -25,7 +25,7 @@ func (c *Client) RepoImageFromPath(path string) (string, string) {
 	}
 
 	if lenSplit > 1 {
-		return split[lenSplit-2], split[lenSplit-1]
+		return strings.Join(split[:lenSplit-1], "/"), split[lenSplit-1]
 	}
 
 	return path, ""
