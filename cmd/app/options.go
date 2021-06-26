@@ -94,7 +94,7 @@ func (o *Options) addAppFlags(fs *pflag.FlagSet) {
 		"Address to serve metrics on at the /metrics path.")
 
 	fs.BoolVarP(&o.DefaultTestAll,
-		"test-all-containers", "a", false,
+		"test-all-containers", "a", true,
 		"If enabled, all containers will be tested, unless they have the "+
 			`annotation "enable.version-checker/${my-container}=false".`)
 
