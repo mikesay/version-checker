@@ -40,6 +40,9 @@ const (
 	envSelfhostedPassword = "PASSWORD"
 	envSelfhostedBearer   = "TOKEN"
 	envSelfhostedHost     = "HOST"
+
+	envALICRAccessKeyID     = "ALICR_ACCESS_KEY_ID"
+	envALICRSecretAccessKey = "ALICR_SECRET_ACCESS_KEY"
 )
 
 var (
@@ -174,6 +177,19 @@ func (o *Options) addAuthFlags(fs *pflag.FlagSet) {
 		))
 	///
 
+	/// ALICR
+	fs.StringVar(&o.Client.ALICR.AccessKeyID,
+		"alicr-access-key-id", "",
+		fmt.Sprintf("AliCR access key ID for read access to private registries (%s_%s).",
+			envPrefix, envALICRAccessKeyID,
+		))
+	fs.StringVar(&o.Client.ALICR.SecretAccessKey,
+		"alicr-secret-access-key", "",
+		fmt.Sprintf("AliCR secret access key for read access to private registries (%s_%s).",
+			envPrefix, envECRSecretAccessKey,
+		))
+	///
+
 	/// GCR
 	fs.StringVar(&o.Client.GCR.Token,
 		"gcr-token", "",
@@ -244,6 +260,9 @@ func (o *Options) complete() {
 		{envGCRAccessToken, &o.Client.GCR.Token},
 
 		{envQuayToken, &o.Client.Quay.Token},
+
+		{envALICRAccessKeyID, &o.Client.ALICR.AccessKeyID},
+		{envALICRSecretAccessKey, &o.Client.ALICR.SecretAccessKey},
 	} {
 		for _, env := range envs {
 			if o.assignEnv(env, opt.key, opt.assign) {
