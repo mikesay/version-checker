@@ -5,37 +5,66 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/cr"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ecr"
-
 	"github.com/jetstack/version-checker/pkg/api"
 	"github.com/jetstack/version-checker/pkg/client/util"
 )
 
-type Client struct {
-	cacheMu             sync.Mutex
-	cachedRegionClients map[string]*ecr.ECR
+type Tag struct {
+	Status      string `json:"status"`
+	Digest      string `json:"digest"`
+	Tag         string `json:"tag"`
+	ImageCreate uint64 `json:"imageCreate"`
+	ImageId     string `json:"imageId"`
+	ImageUpdate uint64 `json:"imageUpdate"`
+	ImageSize   uint64 `json:"imageSize"`
+}
 
-	Options
+type RepoTagRepose struct {
+	Page     int   `json:"page"`
+	PageSize int   `json:"pageSize"`
+	Total    int   `json:"total"`
+	Tags     []Tag `json:"tags"`
+}
+
+type RepoTagData struct {
+	Data RepoTagRepose `json:"data"`
+}
+
+type Client struct {
+	cacheMu            sync.Mutex
+	Options            Options
+	cachedRegionClient *cr.Client
 }
 
 type Options struct {
 	AccessKeyID     string
 	SecretAccessKey string
+	Region          string
 	SessionToken    string
 }
 
 func New(opts Options) *Client {
+	var (
+		client *cr.Client
+		err    error
+	)
+	client, err = cr.NewClientWithAccessKey(opts.Region, opts.AccessKeyID, opts.SecretAccessKey)
+	if err != nil {
+		// Handle exceptions
+		panic(err)
+	}
+
 	return &Client{
-		Options:             opts,
-		cachedRegionClients: make(map[string]*ecr.ECR),
+		Options:            opts,
+		cachedRegionClient: client,
 	}
 }
 
 func (c *Client) Name() string {
-	return "ecr"
+	return "alicr"
 }
 
 func (c *Client) Tags(ctx context.Context, host, repo, image string) ([]api.ImageTag, error) {
@@ -85,35 +114,4 @@ func (c *Client) Tags(ctx context.Context, host, repo, image string) ([]api.Imag
 	}
 
 	return tags, nil
-}
-
-func (c *Client) getClient(region string) (*ecr.ECR, error) {
-	c.cacheMu.Lock()
-	defer c.cacheMu.Unlock()
-
-	client, ok := c.cachedRegionClients[region]
-	if !ok || client == nil || client.Config.Credentials.IsExpired() {
-		// If the client is not yet created, or the token has expired, create new.
-
-		var err error
-		client, err = c.createRegionClient(region)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	c.cachedRegionClients[region] = client
-	return client, nil
-}
-
-func (c *Client) createRegionClient(region string) (*ecr.ECR, error) {
-	sess, err := session.NewSession(&aws.Config{
-		Credentials: credentials.NewStaticCredentials(c.AccessKeyID, c.SecretAccessKey, c.SessionToken),
-		Region:      &region,
-	})
-	if err != nil {
-		return nil, fmt.Errorf("failed to construct aws credentials: %s", err)
-	}
-
-	return ecr.New(sess, sess.Config), nil
 }

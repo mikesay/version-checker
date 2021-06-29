@@ -6,11 +6,11 @@ import (
 )
 
 var (
-	ecrPattern = regexp.MustCompile(`(^[a-zA-Z0-9][a-zA-Z0-9-_]*)\.dkr\.ecr(\-fips)?\.([a-zA-Z0-9][a-zA-Z0-9-_]*)\.amazonaws\.com(\.cn)?$`)
+	alicrPattern = regexp.MustCompile(`^registry\.(.*)\.aliyuncs\.com$`)
 )
 
 func (c *Client) IsHost(host string) bool {
-	return ecrPattern.MatchString(host)
+	return alicrPattern.MatchString(host)
 }
 
 func (c *Client) RepoImageFromPath(path string) (string, string) {
