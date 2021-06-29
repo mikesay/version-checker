@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.57.0 // indirect
 	github.com/Azure/go-autorest/autorest v0.10.2
 	github.com/Azure/go-autorest/autorest/adal v0.8.3
-	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1162 // indirect
+	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1162
 	github.com/aws/aws-sdk-go v1.34.10
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/google/go-cmp v0.4.1 // indirect

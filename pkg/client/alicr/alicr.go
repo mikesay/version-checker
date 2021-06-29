@@ -2,24 +2,23 @@ package alicr
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/cr"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/ecr"
 	"github.com/jetstack/version-checker/pkg/api"
-	"github.com/jetstack/version-checker/pkg/client/util"
 )
 
 type Tag struct {
 	Status      string `json:"status"`
 	Digest      string `json:"digest"`
 	Tag         string `json:"tag"`
-	ImageCreate uint64 `json:"imageCreate"`
+	ImageCreate int64  `json:"imageCreate"`
 	ImageId     string `json:"imageId"`
-	ImageUpdate uint64 `json:"imageUpdate"`
-	ImageSize   uint64 `json:"imageSize"`
+	ImageUpdate int64  `json:"imageUpdate"`
+	ImageSize   int64  `json:"imageSize"`
 }
 
 type RepoTagRepose struct {
@@ -34,32 +33,21 @@ type RepoTagData struct {
 }
 
 type Client struct {
-	cacheMu            sync.Mutex
-	Options            Options
-	cachedRegionClient *cr.Client
+	cacheMu             sync.Mutex
+	cachedRegionClients map[string]*cr.Client
+
+	Options
 }
 
 type Options struct {
 	AccessKeyID     string
 	SecretAccessKey string
-	Region          string
-	SessionToken    string
 }
 
 func New(opts Options) *Client {
-	var (
-		client *cr.Client
-		err    error
-	)
-	client, err = cr.NewClientWithAccessKey(opts.Region, opts.AccessKeyID, opts.SecretAccessKey)
-	if err != nil {
-		// Handle exceptions
-		panic(err)
-	}
-
 	return &Client{
-		Options:            opts,
-		cachedRegionClient: client,
+		Options:             opts,
+		cachedRegionClients: make(map[string]*cr.Client),
 	}
 }
 
@@ -68,50 +56,62 @@ func (c *Client) Name() string {
 }
 
 func (c *Client) Tags(ctx context.Context, host, repo, image string) ([]api.ImageTag, error) {
-	matches := ecrPattern.FindStringSubmatch(host)
-	if len(matches) < 3 {
-		return nil, fmt.Errorf("aws client not suitable for image host: %s", host)
+	var (
+		err     error
+		client  *cr.Client
+		request *cr.GetRepoTagsRequest
+		resp    *cr.GetRepoTagsResponse
+	)
+
+	matches := alicrPattern.FindStringSubmatch(host)
+	if len(matches) != 0 {
+		return nil, fmt.Errorf("aliyun client not suitable for image host: %s", host)
 	}
 
-	id := matches[1]
-	region := matches[3]
-
-	client, err := c.getClient(region)
+	region := matches[1]
+	client, err = c.getClient(region)
 	if err != nil {
-		return nil, fmt.Errorf("failed to construct ecr client for image host %s: %s",
+		return nil, fmt.Errorf("failed to construct alicr client for image host %s: %s",
 			host, err)
 	}
 
-	repoName := util.JoinRepoImage(repo, image)
-	images, err := client.DescribeImagesWithContext(ctx, &ecr.DescribeImagesInput{
-		RepositoryName: &repoName,
-		RegistryId:     aws.String(id),
-	})
+	request = cr.CreateGetRepoTagsRequest()
+	request.RepoNamespace = repo
+	request.RepoName = image
+	resp, err = client.GetRepoTags(request)
 	if err != nil {
-		return nil, fmt.Errorf("failed to describe images: %s", err)
+		panic(err)
 	}
+	fmt.Println(resp.GetHttpContentString())
+	respData := resp.GetHttpContentBytes()
+	var repoTagData RepoTagData
+	err = json.Unmarshal(respData, &repoTagData)
 
 	var tags []api.ImageTag
-	for _, img := range images.ImageDetails {
-
-		// Continue early if no tags available
-		if len(img.ImageTags) == 0 {
-			tags = append(tags, api.ImageTag{
-				SHA:       *img.ImageDigest,
-				Timestamp: *img.ImagePushedAt,
-			})
-
-			continue
-		}
-
-		for _, tag := range img.ImageTags {
-			tags = append(tags, api.ImageTag{
-				SHA:       *img.ImageDigest,
-				Timestamp: *img.ImagePushedAt,
-				Tag:       *tag,
-			})
-		}
+	for _, tg := range repoTagData.Data.Tags {
+		tags = append(tags, api.ImageTag{
+			SHA:       tg.Digest,
+			Timestamp: time.Unix(tg.ImageUpdate, 0),
+			Tag:       tg.Tag,
+		})
 	}
 
 	return tags, nil
+}
+
+func (c *Client) getClient(region string) (*cr.Client, error) {
+	c.cacheMu.Lock()
+	defer c.cacheMu.Unlock()
+
+	client, ok := c.cachedRegionClients[region]
+	if !ok || client == nil {
+		var err error
+		client, err = cr.NewClientWithAccessKey(region, c.AccessKeyID, c.SecretAccessKey)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	c.cachedRegionClients[region] = client
+	return client, nil
 }
