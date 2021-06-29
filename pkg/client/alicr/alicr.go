@@ -64,7 +64,7 @@ func (c *Client) Tags(ctx context.Context, host, repo, image string) ([]api.Imag
 	)
 
 	matches := alicrPattern.FindStringSubmatch(host)
-	if len(matches) != 0 {
+	if len(matches) < 2 {
 		return nil, fmt.Errorf("aliyun client not suitable for image host: %s", host)
 	}
 
@@ -80,12 +80,16 @@ func (c *Client) Tags(ctx context.Context, host, repo, image string) ([]api.Imag
 	request.RepoName = image
 	resp, err = client.GetRepoTags(request)
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("failed to get repo tags of image %s: %s",
+			image, err)
 	}
-	fmt.Println(resp.GetHttpContentString())
 	respData := resp.GetHttpContentBytes()
 	var repoTagData RepoTagData
 	err = json.Unmarshal(respData, &repoTagData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to construct alicr client for image host %s: %s",
+			host, err)
+	}
 
 	var tags []api.ImageTag
 	for _, tg := range repoTagData.Data.Tags {
