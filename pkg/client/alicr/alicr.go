@@ -78,13 +78,12 @@ func (c *Client) Tags(ctx context.Context, host, repo, image string) ([]api.Imag
 
 	page := 1
 	pageSize := 30
-	total := page * pageSize
 	request = cr.CreateGetRepoTagsRequest()
 	request.RepoNamespace = repo
 	request.RepoName = image
 
 	var tags []api.ImageTag
-	for page*pageSize-total > 0 {
+	for {
 		request.Page = requests.NewInteger(page)
 		request.PageSize = requests.NewInteger(pageSize)
 
@@ -109,8 +108,11 @@ func (c *Client) Tags(ctx context.Context, host, repo, image string) ([]api.Imag
 			})
 		}
 
+		if repoTagData.Data.Total-page*pageSize <= 0 {
+			break
+		}
+
 		page = page + 1
-		total = repoTagData.Data.Total
 	}
 
 	return tags, nil
