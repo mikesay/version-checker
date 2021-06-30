@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/cr"
 	"github.com/jetstack/version-checker/pkg/api"
 )
@@ -75,29 +76,41 @@ func (c *Client) Tags(ctx context.Context, host, repo, image string) ([]api.Imag
 			host, err)
 	}
 
+	page := 1
+	pageSize := 30
+	total := page * pageSize
 	request = cr.CreateGetRepoTagsRequest()
 	request.RepoNamespace = repo
 	request.RepoName = image
-	resp, err = client.GetRepoTags(request)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get repo tags of image %s: %s",
-			image, err)
-	}
-	respData := resp.GetHttpContentBytes()
-	var repoTagData RepoTagData
-	err = json.Unmarshal(respData, &repoTagData)
-	if err != nil {
-		return nil, fmt.Errorf("failed to construct alicr client for image host %s: %s",
-			host, err)
-	}
 
 	var tags []api.ImageTag
-	for _, tg := range repoTagData.Data.Tags {
-		tags = append(tags, api.ImageTag{
-			SHA:       tg.Digest,
-			Timestamp: time.Unix(tg.ImageUpdate, 0),
-			Tag:       tg.Tag,
-		})
+	for page*pageSize-total > 0 {
+		request.Page = requests.NewInteger(page)
+		request.PageSize = requests.NewInteger(pageSize)
+
+		resp, err = client.GetRepoTags(request)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get repo tags of image %s: %s",
+				image, err)
+		}
+		respData := resp.GetHttpContentBytes()
+		var repoTagData RepoTagData
+		err = json.Unmarshal(respData, &repoTagData)
+		if err != nil {
+			return nil, fmt.Errorf("failed to construct alicr client for image host %s: %s",
+				host, err)
+		}
+
+		for _, tg := range repoTagData.Data.Tags {
+			tags = append(tags, api.ImageTag{
+				SHA:       tg.Digest,
+				Timestamp: time.Unix(tg.ImageUpdate, 0),
+				Tag:       tg.Tag,
+			})
+		}
+
+		page = page + 1
+		total = repoTagData.Data.Total
 	}
 
 	return tags, nil

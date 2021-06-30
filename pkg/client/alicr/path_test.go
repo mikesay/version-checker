@@ -19,11 +19,11 @@ func TestIsHost(t *testing.T) {
 			host:  "foobar.foo",
 			expIs: false,
 		},
-		"just amazonawsaws.com should be false": {
-			host:  "amazonaws.com",
+		"just aliyuncs.com should be false": {
+			host:  "aliyuncs.com",
 			expIs: false,
 		},
-		"ecr.foo.amazonaws.com with random sub domains should be false": {
+		"registry.(.*).aliyuncs.com with random sub domains should be false": {
 			host:  "bar.ecr.foo.amazonaws.com",
 			expIs: false,
 		},
@@ -31,8 +31,8 @@ func TestIsHost(t *testing.T) {
 			host:  "dkr.ecr.foo.amazonaws.com",
 			expIs: false,
 		},
-		"hello123.dkr.ecr.foo.amazonaws.com true": {
-			host:  "hello123.dkr.ecr.foo.amazonaws.com",
+		"registry.cn-shanghai.aliyuncs.com true": {
+			host:  "registry.cn-shanghai.aliyuncs.com",
 			expIs: true,
 		},
 		"123hello.dkr.ecr.foo.amazonaws.com true": {
