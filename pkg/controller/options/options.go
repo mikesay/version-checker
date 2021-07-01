@@ -112,10 +112,6 @@ func (b *Builder) Options(name string) (*api.Options, error) {
 			b.index(name, api.UseSHAAnnotationKey)))
 	}
 
-	if !setNonSha {
-		opts.UseSHA = true
-	}
-
 	if len(errs) > 0 {
 		return nil, errors.New(strings.Join(errs, ", "))
 	}

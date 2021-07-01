@@ -75,9 +75,16 @@ func (v *Version) LatestTagFromImage(ctx context.Context, imageURL string, opts 
 		}
 
 		if tag == nil {
-			optsBytes, _ := json.Marshal(opts)
-			return nil, versionerrors.NewVersionErrorNotFound("%s: no tags found with these option constraints: %s",
-				imageURL, optsBytes)
+			tag, err = latestSHA(tags)
+			if err != nil {
+				return nil, err
+			}
+
+			if tag == nil {
+				optsBytes, _ := json.Marshal(opts)
+				return nil, versionerrors.NewVersionErrorNotFound("%s: failed to find latest image based on SHA, and no tags found with these option constraints: %s",
+					imageURL, optsBytes)
+			}
 		}
 	}
 
