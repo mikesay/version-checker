@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jetstack/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/api"
 )
 
 // Builder is a struct for building container search options

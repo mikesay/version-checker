@@ -7,7 +7,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/jetstack/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/api"
 )
 
 // Cache is a generic cache store.

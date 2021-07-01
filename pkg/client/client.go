@@ -7,14 +7,14 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/jetstack/version-checker/pkg/api"
-	"github.com/jetstack/version-checker/pkg/client/acr"
-	"github.com/jetstack/version-checker/pkg/client/alicr"
-	"github.com/jetstack/version-checker/pkg/client/docker"
-	"github.com/jetstack/version-checker/pkg/client/ecr"
-	"github.com/jetstack/version-checker/pkg/client/gcr"
-	"github.com/jetstack/version-checker/pkg/client/quay"
-	"github.com/jetstack/version-checker/pkg/client/selfhosted"
+	"github.com/mikesay/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/client/acr"
+	"github.com/mikesay/version-checker/pkg/client/alicr"
+	"github.com/mikesay/version-checker/pkg/client/docker"
+	"github.com/mikesay/version-checker/pkg/client/ecr"
+	"github.com/mikesay/version-checker/pkg/client/gcr"
+	"github.com/mikesay/version-checker/pkg/client/quay"
+	"github.com/mikesay/version-checker/pkg/client/selfhosted"
 )
 
 // ImageClient represents a image registry client that can list available tags

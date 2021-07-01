@@ -16,12 +16,12 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/utils/clock"
 
-	"github.com/jetstack/version-checker/pkg/client"
-	"github.com/jetstack/version-checker/pkg/controller/checker"
-	"github.com/jetstack/version-checker/pkg/controller/scheduler"
-	"github.com/jetstack/version-checker/pkg/controller/search"
-	"github.com/jetstack/version-checker/pkg/metrics"
-	"github.com/jetstack/version-checker/pkg/version"
+	"github.com/mikesay/version-checker/pkg/client"
+	"github.com/mikesay/version-checker/pkg/controller/checker"
+	"github.com/mikesay/version-checker/pkg/controller/scheduler"
+	"github.com/mikesay/version-checker/pkg/controller/search"
+	"github.com/mikesay/version-checker/pkg/metrics"
+	"github.com/mikesay/version-checker/pkg/version"
 )
 
 const (

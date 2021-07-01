@@ -13,9 +13,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/jetstack/version-checker/pkg/api"
-	selfhostederrors "github.com/jetstack/version-checker/pkg/client/selfhosted/errors"
-	"github.com/jetstack/version-checker/pkg/client/util"
+	"github.com/mikesay/version-checker/pkg/api"
+	selfhostederrors "github.com/mikesay/version-checker/pkg/client/selfhosted/errors"
+	"github.com/mikesay/version-checker/pkg/client/util"
 )
 
 const (

@@ -10,8 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ecr"
 
-	"github.com/jetstack/version-checker/pkg/api"
-	"github.com/jetstack/version-checker/pkg/client/util"
+	"github.com/mikesay/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/client/util"
 )
 
 type Client struct {

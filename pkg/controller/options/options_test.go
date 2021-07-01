@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/jetstack/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/api"
 )
 
 func TestBuild(t *testing.T) {

@@ -9,9 +9,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/jetstack/version-checker/pkg/api"
-	"github.com/jetstack/version-checker/pkg/cache"
-	"github.com/jetstack/version-checker/pkg/version"
+	"github.com/mikesay/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/cache"
+	"github.com/mikesay/version-checker/pkg/version"
 )
 
 // Searcher is the interface for Search to facilitate testing

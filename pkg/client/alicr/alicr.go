@@ -9,7 +9,7 @@ import (
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/cr"
-	"github.com/jetstack/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/api"
 )
 
 type Tag struct {

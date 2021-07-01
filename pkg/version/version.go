@@ -8,12 +8,12 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/jetstack/version-checker/pkg/api"
-	"github.com/jetstack/version-checker/pkg/client"
+	"github.com/mikesay/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/client"
 
-	"github.com/jetstack/version-checker/pkg/cache"
-	versionerrors "github.com/jetstack/version-checker/pkg/version/errors"
-	"github.com/jetstack/version-checker/pkg/version/semver"
+	"github.com/mikesay/version-checker/pkg/cache"
+	versionerrors "github.com/mikesay/version-checker/pkg/version/errors"
+	"github.com/mikesay/version-checker/pkg/version/semver"
 )
 
 type Version struct {

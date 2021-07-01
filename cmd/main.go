@@ -9,7 +9,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/jetstack/version-checker/cmd/app"
+	"github.com/mikesay/version-checker/cmd/app"
 )
 
 func main() {

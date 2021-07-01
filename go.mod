@@ -1,4 +1,4 @@
-module github.com/jetstack/version-checker
+module github.com/mikesay/version-checker
 
 go 1.15
 

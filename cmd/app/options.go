@@ -12,8 +12,8 @@ import (
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	cliflag "k8s.io/component-base/cli/flag"
 
-	"github.com/jetstack/version-checker/pkg/client"
-	"github.com/jetstack/version-checker/pkg/client/selfhosted"
+	"github.com/mikesay/version-checker/pkg/client"
+	"github.com/mikesay/version-checker/pkg/client/selfhosted"
 )
 
 const (

@@ -14,8 +14,8 @@ import (
 	"github.com/Azure/go-autorest/autorest/adal"
 	"github.com/dgrijalva/jwt-go"
 
-	"github.com/jetstack/version-checker/pkg/api"
-	"github.com/jetstack/version-checker/pkg/client/util"
+	"github.com/mikesay/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/client/util"
 )
 
 const (

@@ -8,9 +8,9 @@ import (
 	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 
-	"github.com/jetstack/version-checker/pkg/api"
-	"github.com/jetstack/version-checker/pkg/controller/internal/fake/search"
-	"github.com/jetstack/version-checker/pkg/version/semver"
+	"github.com/mikesay/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/controller/internal/fake/search"
+	"github.com/mikesay/version-checker/pkg/version/semver"
 )
 
 func TestContainer(t *testing.T) {

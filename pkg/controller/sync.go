@@ -8,9 +8,9 @@ import (
 	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 
-	"github.com/jetstack/version-checker/pkg/api"
-	"github.com/jetstack/version-checker/pkg/controller/options"
-	versionerrors "github.com/jetstack/version-checker/pkg/version/errors"
+	"github.com/mikesay/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/controller/options"
+	versionerrors "github.com/mikesay/version-checker/pkg/version/errors"
 )
 
 // sync will enqueue a given pod to run against the version checker.

@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/jetstack/version-checker/pkg/api"
-	"github.com/jetstack/version-checker/pkg/controller/search"
+	"github.com/mikesay/version-checker/pkg/api"
+	"github.com/mikesay/version-checker/pkg/controller/search"
 )
 
 var _ search.Searcher = &FakeSearch{}
