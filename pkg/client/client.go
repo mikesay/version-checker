@@ -125,10 +125,12 @@ func (c *Client) fromImageURL(imageURL string) (ImageClient, string, string) {
 
 	for _, client := range c.clients {
 		if client.IsHost(host) {
+			fmt.Printf("Get client: %s for %s and host=%s, path=%s \n\n", client.Name(), imageURL, host, path)
 			return client, host, path
 		}
 	}
 
+	fmt.Printf("Fall back to default client: %s for %s and host=%s, path=%s \n\n", c.fallbackClient.Name(), imageURL, host, path)
 	// fall back to docker with no path split
 	return c.fallbackClient, host, path
 }
