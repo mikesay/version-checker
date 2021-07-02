@@ -88,6 +88,7 @@ func (c *Client) Tags(ctx context.Context, host, repo, image string) ([]api.Imag
 		request.PageSize = requests.NewInteger(pageSize)
 		request.ConnectTimeout = time.Minute
 		request.ReadTimeout = time.Minute * 2
+		request.Scheme = "https"
 
 		resp, err = client.GetRepoTags(request)
 		if err != nil {
