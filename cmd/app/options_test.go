@@ -7,6 +7,7 @@ import (
 
 	"github.com/mikesay/version-checker/pkg/client"
 	"github.com/mikesay/version-checker/pkg/client/acr"
+	"github.com/mikesay/version-checker/pkg/client/alicr"
 	"github.com/mikesay/version-checker/pkg/client/docker"
 	"github.com/mikesay/version-checker/pkg/client/ecr"
 	"github.com/mikesay/version-checker/pkg/client/gcr"
@@ -36,6 +37,8 @@ func TestComplete(t *testing.T) {
 				{"VERSION_CHECKER_ECR_ACCESS_KEY_ID", "ecr-access-token"},
 				{"VERSION_CHECKER_ECR_SECRET_ACCESS_KEY", "ecr-secret-access-token"},
 				{"VERSION_CHECKER_ECR_SESSION_TOKEN", "ecr-session-token"},
+				{"VERSION_CHECKER_ALICR_ACCESS_KEY_ID", "alicr-access-key-id"},
+				{"VERSION_CHECKER_ALICR_SECRET_ACCESS_KEY", "alicr-secret-access-key"},
 				{"VERSION_CHECKER_GCR_TOKEN", "gcr-token"},
 				{"VERSION_CHECKER_QUAY_TOKEN", "quay-token"},
 				{"VERSION_CHECKER_SELFHOSTED_HOST_FOO", "docker.joshvanl.com"},
@@ -58,6 +61,10 @@ func TestComplete(t *testing.T) {
 					AccessKeyID:     "ecr-access-token",
 					SecretAccessKey: "ecr-secret-access-token",
 					SessionToken:    "ecr-session-token",
+				},
+				ALICR: alicr.Options{
+					AccessKeyID:     "alicr-access-key-id",
+					SecretAccessKey: "alicr-secret-access-key",
 				},
 				GCR: gcr.Options{
 					Token: "gcr-token",
@@ -90,6 +97,8 @@ func TestComplete(t *testing.T) {
 				{"VERSION_CHECKER_ECR_ACCESS_KEY_ID", "ecr-access-token"},
 				{"VERSION_CHECKER_ECR_SECRET_ACCESS_KEY", "ecr-secret-access-token"},
 				{"VERSION_CHECKER_ECR_SESSION_TOKEN", "ecr-session-token"},
+				{"VERSION_CHECKER_ALICR_ACCESS_KEY_ID", "alicr-access-key-id"},
+				{"VERSION_CHECKER_ALICR_SECRET_ACCESS_KEY", "alicr-secret-access-key"},
 				{"VERSION_CHECKER_GCR_TOKEN", "gcr-token"},
 				{"VERSION_CHECKER_QUAY_TOKEN", "quay-token"},
 				{"VERSION_CHECKER_SELFHOSTED_HOST_FOO", "docker.joshvanl.com"},
@@ -112,6 +121,10 @@ func TestComplete(t *testing.T) {
 					AccessKeyID:     "ecr-access-token",
 					SecretAccessKey: "ecr-secret-access-token",
 					SessionToken:    "ecr-session-token",
+				},
+				ALICR: alicr.Options{
+					AccessKeyID:     "alicr-access-key-id",
+					SecretAccessKey: "alicr-secret-access-key",
 				},
 				GCR: gcr.Options{
 					Token: "gcr-token",
