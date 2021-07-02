@@ -19,41 +19,13 @@ func TestIsHost(t *testing.T) {
 			host:  "foobar.foo",
 			expIs: false,
 		},
-		"just aliyuncs.com should be false": {
-			host:  "aliyuncs.com",
+		"registry.aliyuncs.com with no region should be false": {
+			host:  "registry.aliyuncs.com",
 			expIs: false,
 		},
-		"registry.(.*).aliyuncs.com with random sub domains should be false": {
-			host:  "bar.ecr.foo.amazonaws.com",
-			expIs: false,
-		},
-		"dkr.ecr.foo.amazonaws.com with random sub domains should be false": {
-			host:  "dkr.ecr.foo.amazonaws.com",
-			expIs: false,
-		},
-		"registry.cn-shanghai.aliyuncs.com true": {
+		"registry.region.aliyuncs.com with random region should be true": {
 			host:  "registry.cn-shanghai.aliyuncs.com",
 			expIs: true,
-		},
-		"123hello.dkr.ecr.foo.amazonaws.com true": {
-			host:  "123hello.dkr.ecr.foo.amazonaws.com",
-			expIs: true,
-		},
-		"hello123.dkr.ecr.foo.amazonaws.com.cn true": {
-			host:  "hello123.dkr.ecr.foo.amazonaws.com.cn",
-			expIs: true,
-		},
-		"123hello.dkr.ecr.foo.amazonaws.com.cn true": {
-			host:  "123hello.dkr.ecr.foo.amazonaws.com.cn",
-			expIs: true,
-		},
-		"123hello.hello.dkr.ecr.foo.amazonaws.com false": {
-			host:  "123hello.hello.dkr.ecr.foo.amazonaws.com",
-			expIs: false,
-		},
-		"123hello.dkr.ecr.foo.amazonaws.comfoo false": {
-			host:  "123hello.dkr.ecr.foo.amazonaws.comfoo",
-			expIs: false,
 		},
 	}
 
@@ -74,19 +46,14 @@ func TestRepoImage(t *testing.T) {
 		expRepo, expImage string
 	}{
 		"single image should return as image": {
-			path:     "kube-scheduler",
-			expRepo:  "",
-			expImage: "kube-scheduler",
+			path:     "aliyun-ingress-controller",
+			expRepo:  "acs",
+			expImage: "aliyun-ingress-controller",
 		},
 		"two segments to path should return both": {
-			path:     "jetstack-cre/version-checker",
-			expRepo:  "jetstack-cre",
-			expImage: "version-checker",
-		},
-		"multiple segments to path should return all in repo, last segment image": {
-			path:     "k8s-artifacts-prod/ingress-nginx/nginx",
-			expRepo:  "k8s-artifacts-prod/ingress-nginx",
-			expImage: "nginx",
+			path:     "aliacs-app-catalog/istio-operator",
+			expRepo:  "aliacs-app-catalog",
+			expImage: "istio-operator",
 		},
 	}
 
